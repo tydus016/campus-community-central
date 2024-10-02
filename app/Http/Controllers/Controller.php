@@ -29,7 +29,7 @@ abstract class Controller
 
     protected function end_transact()
     {
-        DB::commit();
+        DB::disconnect();
     }
 
     protected function _response(array $data, $status = 200)
@@ -195,26 +195,37 @@ abstract class Controller
     }
 
     protected function generate_num($strength = 4)
-	{
-		$permitted_chars = '0123456789';
-		$input_length = strlen($permitted_chars);
-		$random_string = '';
-		for ($i = 0; $i < $strength; $i++) {
-			$random_character = $permitted_chars[mt_rand(0, $input_length - 1)];
-			$random_string .= $random_character;
-		}
-		return $random_string;
-	}
+    {
+        $permitted_chars = '0123456789';
+        $input_length = strlen($permitted_chars);
+        $random_string = '';
+        for ($i = 0; $i < $strength; $i++) {
+            $random_character = $permitted_chars[mt_rand(0, $input_length - 1)];
+            $random_string .= $random_character;
+        }
+        return $random_string;
+    }
 
-	protected function generate_code($strength = 20)
-	{
-		$permitted_chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-		$input_length = strlen($permitted_chars);
-		$random_string = '';
-		for ($i = 0; $i < $strength; $i++) {
-			$random_character = $permitted_chars[mt_rand(0, $input_length - 1)];
-			$random_string .= $random_character;
-		}
-		return strtolower($random_string);
-	}
+    protected function generate_code($strength = 20)
+    {
+        $permitted_chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $input_length = strlen($permitted_chars);
+        $random_string = '';
+        for ($i = 0; $i < $strength; $i++) {
+            $random_character = $permitted_chars[mt_rand(0, $input_length - 1)];
+            $random_string .= $random_character;
+        }
+        return strtolower($random_string);
+    }
+
+    protected function genUniqueID($length = 10)
+    {
+        $characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        $uniqueId = "";
+        for ($i = 0; $i < $length; $i++) {
+            $randomIndex = rand(0, strlen($characters) - 1);
+            $uniqueId .= $characters[$randomIndex];
+        }
+        return $uniqueId;
+    }
 }

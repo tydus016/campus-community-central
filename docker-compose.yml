@@ -1,9 +1,11 @@
+version: '3.8'
+
 services:
   app:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: gps_tracker_front_v2_app
+    container_name: pos_system_backend_app
     working_dir: /var/www/html
     volumes:
       - ./:/var/www/html
@@ -14,13 +16,13 @@ services:
     environment:
       - DB_HOST=mysql
       - DB_PORT=3306
-      - DB_DATABASE=gps_tracker_dev
+      - DB_DATABASE=pos_system
       - DB_USERNAME=root
       - DB_PASSWORD=root
 
   web:
     image: nginx:alpine
-    container_name: nginx
+    container_name: pos_system_backend_app_nginx
     working_dir: /var/www/html
     volumes:
       - ./:/var/www/html
@@ -35,11 +37,12 @@ services:
 
   mysql:
     image: mysql:8.0
-    container_name: gps-tracker-front-v2-mysql
+    container_name: pos-system-backend-mysql
     command: --default-authentication-plugin=mysql_native_password
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: pos_system  # Ensure the database is created on startup
     volumes:
       - mysql_data:/var/lib/mysql
     ports:
@@ -49,7 +52,7 @@ services:
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
-    container_name: gps-tracker-front-v2-pma
+    container_name: pos-system-backend-pma
     environment:
       PMA_HOST: mysql
       MYSQL_ROOT_PASSWORD: root
@@ -60,6 +63,18 @@ services:
     networks:
       - laravel
     platform: linux/amd64  # Ensures compatibility with arm64
+
+  vite:
+    image: node:latest
+    container_name: pos_system_frontend_vite
+    working_dir: /var/www/html
+    volumes:
+      - ./:/var/www/html
+    ports:
+      - "5173:5173"  # Expose Vite server
+    command: npm run dev  # Start the Vite server
+    networks:
+      - laravel
 
 networks:
   laravel:

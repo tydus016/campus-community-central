@@ -1,0 +1,439 @@
+:root {
+    --primary: #007dff;
+    --secondary: #4ecdc4;
+    --black: #000;
+    --white: #fff;
+    --lightGray: #edecec;
+    --gray: #979696;
+
+    --disabled: #a3a3a3;
+    --success: #30c753;
+    --danger: #ff0000;
+    --warning: #ffcc00;
+}
+
+.color-primary {
+    color: var(--primary);
+}
+
+.color-secondary {
+    color: var(--secondary);
+}
+
+.color-black {
+    color: var(--black);
+}
+
+.color-white {
+    color: var(--white);
+}
+
+.color-lightGray {
+    color: var(--lightGray);
+}
+
+.color-gray {
+    color: var(--gray);
+}
+
+.color-disabled {
+    color: var(--disabled);
+}
+
+.color-success {
+    color: var(--success);
+}
+
+.color-danger {
+    color: var(--danger);
+}
+
+.color-warning {
+    color: var(--warning);
+}
+
+.bg-color-primary {
+    background-color: var(--primary);
+}
+
+.bg-color-secondary {
+    background-color: var(--secondary);
+}
+
+.bg-color-black {
+    background-color: var(--black);
+}
+
+.bg-color-white {
+    background-color: var(--white);
+}
+
+.bg-color-lightGray {
+    background-color: var(--lightGray);
+}
+
+.bg-color-gray {
+    background-color: var(--gray);
+}
+
+.bg-color-disabled {
+    background-color: var(--disabled);
+}
+
+.bg-color-success {
+    background-color: var(--success);
+}
+
+.bg-color-danger {
+    background-color: var(--danger);
+}
+
+.bg-color-warning {
+    background-color: var(--warning);
+}
+
+@font-face {
+    font-family: "Nunito";
+    src: url("/fonts/Nunito-Regular.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Nunito";
+    src: url("/fonts/Nunito-Light.ttf") format("truetype");
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Nunito";
+    src: url("/fonts/Nunito-Bold.ttf") format("truetype");
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Nunito";
+    src: url("/fonts/Nunito-Medium.ttf") format("truetype");
+    font-weight: 500;
+    font-style: normal;
+}
+
+/* globals */
+* {
+    font-family: "Nunito", sans-serif;
+}
+body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+.hidden {
+    display: none !important;
+}
+.show {
+    display: block !important;
+}
+a {
+    text-decoration: none;
+    color: var(--black);
+}
+
+/* wrapper */
+.wrapper {
+    padding: 0;
+    margin: 0;
+}
+
+/* topnavbar */
+.topNavbar {
+    position: fixed;
+    width: 100%;
+    height: 40px;
+    background-color: var(--primary);
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 5px;
+}
+
+.navbar-icon {
+    color: var(--white);
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+}
+
+.topNav-leftside {
+    padding-left: 10px;
+    width: 250px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+}
+
+.topNav-rightside {
+    width: 250px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 10px;
+}
+
+.topNavbar-tagline {
+    padding: 5px;
+}
+
+.tagline-text {
+    color: var(--white);
+    font-weight: medium;
+    margin: 0;
+    line-height: 1.1;
+    text-align: center;
+}
+
+.tagline-title {
+    font-size: 22px;
+}
+
+.tagline-subtitle {
+    font-size: 14px;
+}
+
+/* sidebar */
+.sidebar-container {
+    position: fixed;
+    width: 100%;
+    max-width: 260px;
+    height: 100vh;
+    background-color: var(--white);
+    left: 0;
+    top: 50px;
+    box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+
+    -webkit-transform: translate(0, 0);
+    -ms-transform: translate(0, 0);
+    transform: translate(0, 0);
+    transition: all 0.25s ease;
+}
+.sidebar-container.show {
+    transform: translateX(0); /* Slide in */
+}
+
+/* menu items */
+.menu-lists {
+    overflow: hidden;
+}
+.menu-item {
+    width: 100%;
+    padding: 10px 10px 0px 10px;
+}
+.menu-label {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+.menu-label:hover,
+.sub-menu-item:hover {
+    cursor: pointer;
+    background-color: rgb(243 243 243 / 80%);
+}
+.menu-title {
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.sub-menu {
+    padding: 5px 15px 10px 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+
+    -webkit-transform: translate(0, 0);
+    -ms-transform: translate(0, 0);
+    transform: translate(0, 0);
+    transition: all 0.25s ease;
+}
+.sub-menu-item {
+    font-size: 15px;
+    font-weight: 450;
+}
+.sub-menu.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+.sub-menu-item.active {
+    color: var(--primary);
+    background-color: rgb(243 243 243 / 80%);
+}
+
+/* container */
+.Container {
+    padding: 40px 20px 0px 20px;
+    height: 100vh;
+    transition: all 0.25s ease;
+    background-color: var(--lightGray);
+}
+.Container.margin {
+    margin-left: 260px;
+}
+
+/* card */
+.card {
+    width: 100%;
+    padding: 5px;
+}
+.card-title {
+    font-size: 24px;
+    font-weight: 600;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+.card-body {
+    width: 100%;
+    background-color: var(--white);
+    overflow: hidden;
+}
+
+.card-body > * {
+    padding: 15px;
+}
+
+/* users lists */
+.usersRenderLink {
+    text-decoration: underline;
+    font-weight: bold;
+}
+
+.filter-list-btn {
+    width: 35px;
+    height: 35px;
+    cursor: pointer;
+}
+
+.filter-list-container {
+    width: 100%;
+    max-width: 300px;
+}
+
+.filter-list {
+    gap: 1rem;
+    display: flex;
+    align-items: end;
+    justify-content: center;
+}
+
+.slctd-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 0.5rem;
+}
+
+.slctd-filter-item {
+    font-size: 10px;
+    font-weight: 550;
+    border: 1px solid;
+    padding: 2px;
+    border-radius: 10rem;
+    cursor: pointer;
+}
+
+.input-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.filter-box {
+    width: 100%;
+    max-width: 300px;
+    background-color: white;
+    padding: 12px;
+    position: absolute;
+    z-index: 10;
+    margin-top: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    flex-wrap: nowrap;
+}
+
+.filter-list-container label {
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--black);
+}
+
+.filter-box.hidden {
+    display: none;
+}
+
+.filter-input {
+    width: 100%;
+    padding: 10px;
+}
+
+.filter-input.date-filter-input {
+    width: 100%;
+    max-width: 125px;
+}
+
+.filter-input .MuiInputBase-input {
+    font-size: 14px;
+}
+
+/* users details */
+.details-input {
+    width: 100%;
+    padding: 10px;
+}
+
+.detailsForm {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.detailsCardTitle,
+.custom-header-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.detailsDelBtn {
+    padding: 5px;
+    text-transform: uppercase;
+    background: var(--danger);
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-weight: 550;
+}
+.detailsDelBtn:hover {
+    cursor: pointer;
+    opacity: 0.8;
+}
+
+.form-actions {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.field-row {
+    display: flex;
+    flex-wrap: wrap;
+}
+.field-col {
+    flex: 0 0 50%;
+    max-width: 50%;
+}

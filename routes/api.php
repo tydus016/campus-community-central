@@ -1,41 +1,55 @@
 <?php
 
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\DriverController;
+use App\Http\Controllers\ProductsController;
+use App\Http\Controllers\VouchersController;
+use App\Http\Controllers\OrdersController;
+use App\Http\Controllers\CategoriesController;
+use App\Http\Controllers\UsersController;
 use App\Http\Controllers\LoginController;
-use App\Http\Controllers\TrackerController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
 
-// - admin routes
-Route::prefix('admin')->group(function () {
-    Route::post('get_admin_lists', [AdminController::class, 'get_admin_lists']);
-    Route::post('add_new_admin', [AdminController::class, 'add_new_admin']);
-    Route::post('update_admin_profile', [AdminController::class, 'update_admin_profile']);
-    Route::post('get_admin_details', [AdminController::class, 'get_admin_details']);
+// - products routes
+Route::prefix('products')->group(function () {
+    Route::post('products_lists', [ProductsController::class, 'products_lists']);
+    Route::post('product_detail', [ProductsController::class, 'product_detail']);
 });
 
-// - driver routes
-Route::prefix('driver')->group(function () {
-    Route::post('get_drivers', [DriverController::class, 'get_drivers']);
-    Route::post('add_new_driver', [DriverController::class, 'add_new_driver']);
-    Route::post('update_driver_status', [DriverController::class, 'update_driver_status']);
-    Route::post('update_driver_delete_status', [DriverController::class, 'update_driver_delete_status']);
-    Route::post('update_driver_details', [DriverController::class, 'update_driver_details']);
-    Route::post('get_driver_details', [DriverController::class, 'get_driver_details']);
+// - vouchers routes
+Route::prefix('vouchers')->group(function () {
+    Route::post('apply_voucher', [VouchersController::class, 'apply_voucher']);
 });
 
-// - login route
-Route::post('/login/auth_v2', [LoginController::class, 'auth_v2']);
+// - orders routes
+Route::prefix('orders')->group(function () {
+    Route::post('create_order', [OrdersController::class, 'create_order']);
+    Route::post('save_order', [OrdersController::class, 'save_order']);
+    Route::post('update_order_status', [OrdersController::class, 'update_order_status']);
+    Route::post('checkout_order', [OrdersController::class, 'checkout_order']);
+});
 
-// - tracker routes
-Route::prefix('tracker')->group(function () {
-    Route::post('create_geofence', [TrackerController::class, 'create_geofence']);
-    Route::post('get_active_fence', [TrackerController::class, 'get_active_fence']);
-    Route::post('get_geofence_lists', [TrackerController::class, 'get_geofence_lists']);
+// - categories routes
+Route::prefix('categories')->group(function () {
+    Route::post('categories_lists', [CategoriesController::class, 'categories_lists']);
+});
+
+// - users routes
+Route::prefix('users')->group(function () {
+    Route::post('create_user', [UsersController::class, 'create_user']);
+    Route::post('users_lists', [UsersController::class, 'users_lists']);
+    Route::post('users_details', [UsersController::class, 'users_details']);
+    Route::post('update_user_status', [UsersController::class, 'update_user_status']);
+    Route::post('update_delete_flg', [UsersController::class, 'update_delete_flg']);
+    Route::post('update_user_details', [UsersController::class, 'update_user_details']);
+});
+
+// - login routes
+Route::prefix('login')->group(function () {
+    Route::post('authenticate', [LoginController::class, 'authenticate']);
 });

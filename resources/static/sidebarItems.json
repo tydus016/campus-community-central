@@ -1,0 +1,30 @@
+[
+    {
+        "title": "Users Management",
+        "icon": "Group",
+        "submenu": [
+            {
+                "subtitle": "Users list",
+                "url": "/users/lists"
+            },
+            {
+                "subtitle": "Add new user",
+                "url": "/users/add-new-user"
+            }
+        ]
+    },
+    {
+        "title": "Products Management",
+        "icon": "ShoppingCart",
+        "submenu": [
+            {
+                "subtitle": "Products list",
+                "url": "/products/lists"
+            },
+            {
+                "subtitle": "Add new product",
+                "url": "/products/add-new-product"
+            }
+        ]
+    }
+]

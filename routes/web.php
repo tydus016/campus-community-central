@@ -1,11 +1,15 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AdminController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\UsersController;
+use App\Http\Controllers\DashboardController;
 
-Route::get('/', function () {
-    return view('welcome');
+Route::prefix('dashboard')->group(function () {
+    Route::get('/', [DashboardController::class, 'index']);
 });
 
-// Route::post('admin/get_admin_lists', [AdminController::class, 'get_admin_lists']);
+Route::prefix('users')->controller(UsersController::class)->group(function () {
+    Route::get('add-new-user', 'new_user_view');
+    Route::get('lists', 'users_lists_view');
+    Route::get('details/{id}', 'users_details_view');
+});

@@ -1,0 +1,18 @@
+[
+    {
+        "value": null,
+        "label": "-"
+    },
+    {
+        "value": 1,
+        "label": "Super Admin"
+    },
+    {
+        "value": 2,
+        "label": "Admin"
+    },
+    {
+        "value": 3,
+        "label": "User/Staff"
+    }
+]

@@ -146,4 +146,17 @@ if (!function_exists('format_result')) {
 
         return $data;
     }
+
+    if (!function_exists('genUniqueID')) {
+        function genUniqueID($length = 10)
+        {
+            $characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            $uniqueId = "";
+            for ($i = 0; $i < $length; $i++) {
+                $randomIndex = rand(0, strlen($characters) - 1);
+                $uniqueId .= $characters[$randomIndex];
+            }
+            return $uniqueId;
+        }
+    }
 }

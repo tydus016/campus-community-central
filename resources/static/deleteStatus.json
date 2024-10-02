@@ -1,0 +1,14 @@
+[
+    {
+        "value": null,
+        "label": "-"
+    },
+    {
+        "value": 0,
+        "label": "Deleted"
+    },
+    {
+        "value": 1,
+        "label": "Not Deleted"
+    }
+]
