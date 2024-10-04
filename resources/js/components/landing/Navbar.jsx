@@ -19,7 +19,7 @@ function Navbar(props) {
                     <Link className="navbar-link signup" href="/sign-up">
                         sign up
                     </Link>
-                    <Link className="navbar-link login" href="/login">
+                    <Link className="navbar-link login" href="/sign-in">
                         <span>login</span>
                     </Link>
                 </div>

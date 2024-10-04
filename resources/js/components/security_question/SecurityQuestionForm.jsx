@@ -21,7 +21,9 @@ function SecurityQuestionForm(props) {
     };
 
     const onFormSubmit = () => {
-        console.log("form submitted", selectedCourses);
+        // console.log("form submitted", selectedCourses);
+        // Link.visit("/new-password");
+        location.href = "/new-password";
     };
 
     return (
