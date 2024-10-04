@@ -12,6 +12,10 @@
 
 <body>
     @inertia
+
+    <script>
+        const CSRF_TOKEN = "{{csrf_token()}}"
+    </script>
 </body>
 
 </html>

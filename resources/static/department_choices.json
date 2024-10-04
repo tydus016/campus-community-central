@@ -1,0 +1,42 @@
+[
+    {
+        "id": 1,
+        "name": "BS Hospitality Management",
+        "has_chckbx": true
+    },
+    {
+        "id": 2,
+        "name": "BS Tourism Management",
+        "has_chckbx": true
+    },
+    {
+        "id": 3,
+        "name": "BS Information Technology",
+        "has_chckbx": true
+    },
+    {
+        "id": 4,
+        "name": "BS Development Communication",
+        "has_chckbx": true
+    },
+    {
+        "id": 5,
+        "name": "BS Elementary Education",
+        "has_chckbx": true
+    },
+    {
+        "id": 6,
+        "name": "BS Secondary Education",
+        "has_chckbx": false
+    },
+    {
+        "id": 7,
+        "name": "Major in English",
+        "has_chckbx": true
+    },
+    {
+        "id": 8,
+        "name": "Major in Mathematics",
+        "has_chckbx": true
+    }
+]

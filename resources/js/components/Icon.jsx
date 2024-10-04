@@ -18,6 +18,9 @@ function Icon({ type, className, style, onClick = () => {} }) {
                     ShoppingCart: () =>
                         import("@mui/icons-material/ShoppingCart"),
                     FilterList: () => import("@mui/icons-material/FilterList"),
+                    Visibility: () => import("@mui/icons-material/Visibility"),
+                    VisibilityOff: () =>
+                        import("@mui/icons-material/VisibilityOff"),
                 };
 
                 if (iconMap[type]) {

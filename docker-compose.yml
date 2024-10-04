@@ -1,83 +1,83 @@
-version: '3.8'
+version: "3.8"
 
 services:
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: pos_system_backend_app
-    working_dir: /var/www/html
-    volumes:
-      - ./:/var/www/html
-    networks:
-      - laravel
-    depends_on:
-      - mysql
-    environment:
-      - DB_HOST=mysql
-      - DB_PORT=3306
-      - DB_DATABASE=pos_system
-      - DB_USERNAME=root
-      - DB_PASSWORD=root
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: campus_community_central
+        working_dir: /var/www/html
+        volumes:
+            - ./:/var/www/html
+        networks:
+            - laravel
+        depends_on:
+            - mysql
+        environment:
+            - DB_HOST=mysql
+            - DB_PORT=3306
+            - DB_DATABASE=campus_community_central
+            - DB_USERNAME=root
+            - DB_PASSWORD=root
 
-  web:
-    image: nginx:alpine
-    container_name: pos_system_backend_app_nginx
-    working_dir: /var/www/html
-    volumes:
-      - ./:/var/www/html
-      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
-    ports:
-      - "8082:80"
-    networks:
-      - laravel
-    depends_on:
-      - app
-    platform: linux/amd64  # Ensures compatibility with arm64
+    web:
+        image: nginx:alpine
+        container_name: campus_community_central_nginx
+        working_dir: /var/www/html
+        volumes:
+            - ./:/var/www/html
+            - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+        ports:
+            - "8082:80"
+        networks:
+            - laravel
+        depends_on:
+            - app
+        platform: linux/amd64 # Ensures compatibility with arm64
 
-  mysql:
-    image: mysql:8.0
-    container_name: pos-system-backend-mysql
-    command: --default-authentication-plugin=mysql_native_password
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: pos_system  # Ensure the database is created on startup
-    volumes:
-      - mysql_data:/var/lib/mysql
-    ports:
-      - "3307:3306"  # Change the host port to 3307 to avoid conflicts
-    networks:
-      - laravel
+    mysql:
+        image: mysql:8.0
+        container_name: campus-community-central-mysql
+        command: --default-authentication-plugin=mysql_native_password
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: campus_community_central # Ensure the database is created on startup
+        volumes:
+            - mysql_data:/var/lib/mysql
+        ports:
+            - "3307:3306" # Change the host port to 3307 to avoid conflicts
+        networks:
+            - laravel
 
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    container_name: pos-system-backend-pma
-    environment:
-      PMA_HOST: mysql
-      MYSQL_ROOT_PASSWORD: root
-    ports:
-      - "8083:80"
-    depends_on:
-      - mysql
-    networks:
-      - laravel
-    platform: linux/amd64  # Ensures compatibility with arm64
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        container_name: campus-community-central-pma
+        environment:
+            PMA_HOST: mysql
+            MYSQL_ROOT_PASSWORD: root
+        ports:
+            - "8083:80"
+        depends_on:
+            - mysql
+        networks:
+            - laravel
+        platform: linux/amd64 # Ensures compatibility with arm64
 
-  vite:
-    image: node:latest
-    container_name: pos_system_frontend_vite
-    working_dir: /var/www/html
-    volumes:
-      - ./:/var/www/html
-    ports:
-      - "5173:5173"  # Expose Vite server
-    command: npm run dev  # Start the Vite server
-    networks:
-      - laravel
+    vite:
+        image: node:latest
+        container_name: campus_community_central_vite
+        working_dir: /var/www/html
+        volumes:
+            - ./:/var/www/html
+        ports:
+            - "5173:5173" # Expose Vite server
+        command: npm run dev # Start the Vite server
+        networks:
+            - laravel
 
 networks:
-  laravel:
+    laravel:
 
 volumes:
-  mysql_data:
+    mysql_data:
