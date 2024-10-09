@@ -9,6 +9,7 @@ function Icon({ type, className, style, onClick = () => {} }) {
         async function loadIcon() {
             try {
                 const iconMap = {
+                    Search: () => import("@mui/icons-material/Search"),
                     Group: () => import("@mui/icons-material/Group"),
                     Menu: () => import("@mui/icons-material/Menu"),
                     Close: () => import("@mui/icons-material/Close"),
@@ -21,6 +22,25 @@ function Icon({ type, className, style, onClick = () => {} }) {
                     Visibility: () => import("@mui/icons-material/Visibility"),
                     VisibilityOff: () =>
                         import("@mui/icons-material/VisibilityOff"),
+                    Category: () => import("@mui/icons-material/Category"),
+                    MoreVert: () => import("@mui/icons-material/MoreVert"),
+                    Settings: () => import("@mui/icons-material/Settings"),
+                    Notifications: () =>
+                        import("@mui/icons-material/Notifications"),
+                    AddCircle: () => import("@mui/icons-material/AddCircle"),
+                    Mood: () => import("@mui/icons-material/Mood"),
+                    Mic: () => import("@mui/icons-material/Mic"),
+                    Check: () => import("@mui/icons-material/Check"),
+                    ThumbUp: () => import("@mui/icons-material/ThumbUp"),
+                    ThumbUpAltOutlined: () =>
+                        import("@mui/icons-material/ThumbUpAltOutlined"),
+                    ThumbDown: () => import("@mui/icons-material/ThumbDown"),
+                    ThumbDownAltOutlined: () =>
+                        import("@mui/icons-material/ThumbDownAltOutlined"),
+                    SendOutlined: () =>
+                        import("@mui/icons-material/SendOutlined"),
+                    ImageOutlined: () =>
+                        import("@mui/icons-material/ImageOutlined"),
                 };
 
                 if (iconMap[type]) {

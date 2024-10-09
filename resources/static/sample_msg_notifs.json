@@ -1,0 +1,27 @@
+[
+    {
+        "id": 1,
+        "title": "John Doe",
+        "message": "Hey, are you coming to the meeting tomorrow?"
+    },
+    {
+        "id": 2,
+        "title": "Jane Smith",
+        "message": "Can you send me the report by the end of the day?"
+    },
+    {
+        "id": 3,
+        "title": "Michael Johnson",
+        "message": "Let's catch up for lunch sometime next week!"
+    },
+    {
+        "id": 4,
+        "title": "Emily Davis",
+        "message": "The project deadline has been moved to Friday."
+    },
+    {
+        "id": 5,
+        "title": "David Lee",
+        "message": "Just wanted to check in and see how you're doing."
+    }
+]

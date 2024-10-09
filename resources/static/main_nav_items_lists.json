@@ -1,0 +1,30 @@
+[
+    {
+        "title": "Home Icon",
+        "icon": "/assets/icons/home_icon.png",
+        "link": "/",
+        "is_link": true,
+        "name": "home"
+    },
+    {
+        "title": "Message Icon",
+        "icon": "/assets/icons/message_icon.png",
+        "link": null,
+        "is_link": false,
+        "name": "message"
+    },
+    {
+        "title": "notif bell Icon",
+        "icon": "/assets/icons/notification_bell_icon.png",
+        "link": null,
+        "is_link": false,
+        "name": "notification"
+    },
+    {
+        "title": "profile Icon",
+        "icon": "/assets/icons/profile_account_icon.png",
+        "link": null,
+        "is_link": true,
+        "name": "profile"
+    }
+]

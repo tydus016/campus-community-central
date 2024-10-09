@@ -1,0 +1,62 @@
+[
+    {
+        "message_id": 1,
+        "sender_name": "Alice",
+        "message": "Hey, how's it going?",
+        "user_id": 101
+    },
+    {
+        "message_id": 2,
+        "sender_name": "Bob",
+        "message": "I'm good, how about you?",
+        "user_id": 102
+    },
+    {
+        "message_id": 3,
+        "sender_name": "Alice",
+        "message": "Doing great! Just working on a project.",
+        "user_id": 101
+    },
+    {
+        "message_id": 4,
+        "sender_name": "Bob",
+        "message": "That's awesome! What kind of project?",
+        "user_id": 102
+    },
+    {
+        "message_id": 5,
+        "sender_name": "Alice",
+        "message": "It's a web app, mostly frontend work.",
+        "user_id": 101
+    },
+    {
+        "message_id": 6,
+        "sender_name": "Bob",
+        "message": "Nice, need any help with that?",
+        "user_id": 102
+    },
+    {
+        "message_id": 7,
+        "sender_name": "Alice",
+        "message": "Actually, yes! Could you take a look at the CSS for me?",
+        "user_id": 101
+    },
+    {
+        "message_id": 8,
+        "sender_name": "Bob",
+        "message": "Sure thing, send it over.",
+        "user_id": 102
+    },
+    {
+        "message_id": 9,
+        "sender_name": "Alice",
+        "message": "Thanks! Sending it now.",
+        "user_id": 101
+    },
+    {
+        "message_id": 10,
+        "sender_name": "Bob",
+        "message": "Got it, I'll check it out later today.",
+        "user_id": 102
+    }
+]

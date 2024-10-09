@@ -10,6 +10,12 @@ use Inertia\Inertia;
 
 class UsersController extends Controller
 {
+
+    public function user_profile_view()
+    {
+        return Inertia::render('Users/Profile');
+    }
+
     public function users_lists_view()
     {
         return Inertia::render('Users/Lists');

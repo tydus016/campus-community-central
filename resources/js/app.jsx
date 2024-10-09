@@ -2,6 +2,8 @@ import { createRoot } from "react-dom/client";
 import { createInertiaApp } from "@inertiajs/inertia-react";
 import { InertiaProgress } from "@inertiajs/progress";
 import { AppProvider } from "../js/contexts/AppContext";
+import { NotifProdiver } from "../js/contexts/NotifContext";
+import { MessageNotifProdiver } from "../js/contexts/MessageNotifContext";
 
 import "../css/app.css";
 
@@ -15,7 +17,11 @@ createInertiaApp({
     setup({ el, App, props }) {
         createRoot(el).render(
             <AppProvider>
-                <App {...props} />
+                <NotifProdiver>
+                    <MessageNotifProdiver>
+                        <App {...props} />
+                    </MessageNotifProdiver>
+                </NotifProdiver>
             </AppProvider>
         );
     },

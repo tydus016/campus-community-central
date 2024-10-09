@@ -1,21 +1,46 @@
 import React from "react";
 
 import MainLayout from "../../Layouts/MainLayout";
+import {
+    MainHeader,
+    MainBody,
+    MainContent,
+    MainTitle,
+} from "../../components/MainContent";
 
-// - components
-import { Card, CardTitle, CardBody } from "../../components/Card";
+import {
+    OrgCard,
+    OrgCardBanner,
+    OrgCardFooter,
+    OrgCardTitle,
+} from "../../components/OrgCard";
 
-const Lists = () => {
+function Index(props) {
     return (
         <MainLayout>
-            <Card>
-                <CardTitle>Dashboard</CardTitle>
-                <CardBody>
-                    <p>Welcome to the dashboard</p>
-                </CardBody>
-            </Card>
+            <MainContent>
+                <MainHeader>
+                    <MainTitle>Organizations</MainTitle>
+                </MainHeader>
+
+                <MainBody>
+                    <OrgCard>
+                        <OrgCardBanner>
+                            <img
+                                src="/assets/images/orgs/ap.png"
+                                alt="org-banner"
+                            />
+                        </OrgCardBanner>
+                        <OrgCardFooter>
+                            <OrgCardTitle>
+                                Campus Community Central
+                            </OrgCardTitle>
+                        </OrgCardFooter>
+                    </OrgCard>
+                </MainBody>
+            </MainContent>
         </MainLayout>
     );
-};
+}
 
-export default Lists;
+export default Index;

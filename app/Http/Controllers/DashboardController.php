@@ -9,6 +9,11 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        return Inertia::render('Index');
+        return Inertia::render('Dashboard/Index');
+    }
+
+    public function dashboard_posts_view()
+    {
+        return Inertia::render('Dashboard/Posts');
     }
 }

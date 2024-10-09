@@ -97,6 +97,45 @@ function SignupForm({ onSubmit = () => {} }) {
             </div>
 
             <div className="auth-form-group">
+                <label className="form-group-label">
+                    What was your childhood nickname?
+                </label>
+                <div className="form-group-inputs">
+                    <TextField
+                        variant="outlined"
+                        className="auth-input"
+                        placeholder="Answer"
+                    />
+                </div>
+            </div>
+
+            <div className="auth-form-group">
+                <label className="form-group-label">
+                    What was the name of your bestfriend?
+                </label>
+                <div className="form-group-inputs">
+                    <TextField
+                        variant="outlined"
+                        className="auth-input"
+                        placeholder="Answer"
+                    />
+                </div>
+            </div>
+
+            <div className="auth-form-group">
+                <label className="form-group-label">
+                    What was your first pets name?
+                </label>
+                <div className="form-group-inputs">
+                    <TextField
+                        variant="outlined"
+                        className="auth-input"
+                        placeholder="Answer"
+                    />
+                </div>
+            </div>
+
+            <div className="auth-form-group">
                 <label className="form-group-label">Create Password</label>
                 <div className="form-group-inputs">
                     <TextField
