@@ -12,8 +12,12 @@ export const OrgCardTitle = ({ children, className = "" }) => {
     return <p className={`org-card-title ${className}`}>{children}</p>;
 };
 
-export const OrgCard = ({ children, className = "" }) => {
-    return <div className={`org-card ${className}`}>{children}</div>;
+export const OrgCard = ({ children, className = "", onClick = () => {} }) => {
+    return (
+        <div className={`org-card ${className}`} onClick={onClick}>
+            {children}
+        </div>
+    );
 };
 
 export default { OrgCard, OrgCardBanner, OrgCardFooter, OrgCardTitle };

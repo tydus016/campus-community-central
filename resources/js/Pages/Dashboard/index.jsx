@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
+
+import { Inertia } from "@inertiajs/inertia";
 
 import MainLayout from "../../Layouts/MainLayout";
 import {
@@ -15,7 +17,27 @@ import {
     OrgCardTitle,
 } from "../../components/OrgCard";
 
+import { getOrganizationsLists } from "../../api/organizations_api";
+
 function Index(props) {
+    const [data, setData] = React.useState([]);
+
+    useEffect(() => {
+        fetchOrganizations();
+    }, []);
+
+    const fetchOrganizations = async () => {
+        const response = await getOrganizationsLists();
+
+        if (response.status) {
+            setData(response.data);
+        }
+    };
+
+    const onCardClick = (org) => {
+        Inertia.visit(`/organization/profile/${org.id}`);
+    };
+
     return (
         <MainLayout>
             <MainContent>
@@ -24,19 +46,25 @@ function Index(props) {
                 </MainHeader>
 
                 <MainBody>
-                    <OrgCard>
-                        <OrgCardBanner>
-                            <img
-                                src="/assets/images/orgs/ap.png"
-                                alt="org-banner"
-                            />
-                        </OrgCardBanner>
-                        <OrgCardFooter>
-                            <OrgCardTitle>
-                                Campus Community Central
-                            </OrgCardTitle>
-                        </OrgCardFooter>
-                    </OrgCard>
+                    {data.length > 0 &&
+                        data.map((org, index) => (
+                            <OrgCard
+                                key={index}
+                                onClick={() => onCardClick(org)}
+                            >
+                                <OrgCardBanner>
+                                    <img
+                                        src={org.organization_image}
+                                        alt={org.organization_name}
+                                    />
+                                </OrgCardBanner>
+                                <OrgCardFooter>
+                                    <OrgCardTitle>
+                                        {org.organization_name}
+                                    </OrgCardTitle>
+                                </OrgCardFooter>
+                            </OrgCard>
+                        ))}
                 </MainBody>
             </MainContent>
         </MainLayout>

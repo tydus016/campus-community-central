@@ -9,6 +9,7 @@ use App\Http\Controllers\OrdersController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\OrganizationsController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -52,4 +53,8 @@ Route::prefix('users')->group(function () {
 // - login routes
 Route::prefix('login')->group(function () {
     Route::post('authenticate', [LoginController::class, 'authenticate']);
+});
+
+Route::prefix('organization')->controller(OrganizationsController::class)->group(function () {
+    Route::post('organizations-lists', 'organizations_lists');
 });

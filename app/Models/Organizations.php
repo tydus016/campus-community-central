@@ -74,4 +74,61 @@ class Organizations extends Model
 
         return $res;
     }
+
+    public function organizations_lists(array $post)
+    {
+        $org_id = $post['org_id'] ?? null;
+        $organization_name = $post['organization_name'] ?? null;
+
+        $page = $post['page'] ?? 1;
+        $limit = $post['limit'] ?? 10;
+        $offset = ($page - 1) * $limit;
+
+        try {
+            $query = $this->select(
+                "organizations.*",
+                "users.id as user_id",
+            )->selectRaw("CONCAT(users.first_name, ' ', users.last_name) as admin_name")
+                ->join('users', 'users.organization_id', '=', 'organizations.id');
+
+            if ($org_id) {
+                $query->where('id', $org_id);
+            }
+
+            if ($organization_name) {
+                $query->where('organization_name', 'like', '%' . $organization_name . '%');
+            }
+
+            $total_count = $query->count();
+
+            $result = $query->offset($offset)
+                ->limit($limit)
+                ->get();
+
+            $count = $result->count();
+            $has_next = ($total_count > ($page * $limit));
+
+            $res = [
+                'data' => $result,
+                'total_count' => $total_count,
+                'count' => $count,
+                'has_next' => $has_next,
+                'success' => true,
+            ];
+        } catch (QueryException $e) {
+            Log::error($e->getMessage());
+
+            $res = [
+                'success' => false,
+                'message' => 'Failed to fetch organizations',
+            ];
+        }
+
+        return $res;
+    }
+
+    public function getOrganizationImageAttribute($value)
+    {
+        return $value ? asset($value) : null;
+    }
 }

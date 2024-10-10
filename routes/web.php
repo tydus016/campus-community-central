@@ -32,9 +32,11 @@ Route::middleware([OnlyRegularUsersMiddleware::class])->group(function () {
     Route::get('/profile', [UsersController::class, 'user_profile_view']);
 });
 
-Route::prefix('organization')->group(function () {
-    Route::get('/profile', [OrganizationsController::class, 'org_profile_view']);
-    Route::get('/post-details', [OrganizationsController::class, 'post_details_view']);
+Route::prefix('organization')->controller(UsersController::class)->group(function () {
+    Route::get('/profile/{id}', [OrganizationsController::class, 'org_profile_view']);
+    Route::get('/post-details', 'post_details_view');
+
+    Route::post('organizations-lists', [OrganizationsController::class, 'organizations_lists']);
 });
 
 Route::prefix('admin')->group(function () {
