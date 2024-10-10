@@ -2,7 +2,7 @@ import axios from "axios";
 const base_url = "/api/";
 
 export const post = async (Url, data, headers = {}) => {
-    const url = base_url + Url;
+    const url = Url;
 
     console.log("--START SENDING POST REQUEST--");
     console.log("URL => ", url);

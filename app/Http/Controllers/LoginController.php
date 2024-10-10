@@ -23,17 +23,27 @@ class LoginController extends Controller
 
                 $session_data = [
                     'user_id' => $user->id,
-                    'username' => $user->username,
-                    'email' => $user->email,
-                    'login_token' => $user->login_token,
+                    'login_token' => $user->remember_token,
                     'account_type' => $user->account_type,
                 ];
 
-                if (Hash::check($post['password'], $user->password)) {
+                try {
+                    $password_verify = Hash::check($post['password'], $user->password);
+                } catch (Exception $e) {
+                    $password_verify = password_verify($post['password'], $user->password);
+                }
+
+                if ($password_verify) {
+                    $request->session()->regenerate();
+
+                    $request->session()->put('user', $session_data);
+
                     $res = [
                         'status' => true,
                         'message' => 'Login successful',
                         'data' => $session_data,
+                        'redirect' => $this->redirect_path($user->account_type),
+                        // 'session' => $request->session()->all(),
                     ];
                 } else {
                     $res = [
@@ -57,5 +67,20 @@ class LoginController extends Controller
         }
 
         return $this->_response($res);
+    }
+
+    private function redirect_path($account_type)
+    {
+        switch ($account_type) {
+            case ACCOUNT_TYPE_USER:
+                return '/dashboard';
+            case ACCOUNT_TYPE_ADMIN:
+                return '/admin/home';
+            case ACCOUNT_TYPE_HEAD_ADMIN:
+                return '/dashboard';
+
+            default:
+                return false;
+        }
     }
 }

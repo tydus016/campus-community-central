@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Models\Users;
+use App\Models\PasswordResetTokens;
 
 class AuthController extends Controller
 {
@@ -21,9 +23,19 @@ class AuthController extends Controller
     {
         return Inertia::render('Auth/SecurityQuestion');
     }
+    /** end of views */
 
-    public function new_password_view()
+    public function new_password_view($id = null)
     {
-        return Inertia::render('Auth/NewPassword');
+        $token = PasswordResetTokens::where('token', $id)->first();
+
+        if (!$token) {
+            return redirect('/forgot-password');
+        }
+
+        return Inertia::render('Auth/NewPassword', [
+            'token_hash' => $id,
+            'user_id' => $token->user_id,
+        ]);
     }
 }

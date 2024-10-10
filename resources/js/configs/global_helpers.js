@@ -100,6 +100,20 @@ export const objectToArrayOfObjects = (obj = null) => {
     });
 };
 
+export const toFormData = (obj) => {
+    const formData = new FormData();
+    const keys = Object.keys(obj);
+    const values = Object.values(obj);
+
+    for (let i = 0; i <= keys.length; i++) {
+        if ((keys[i] && values[i]) !== undefined) {
+            formData.append(keys[i], values[i]);
+        }
+    }
+
+    return formData;
+};
+
 export default {
     swal,
     swal_confirm,
@@ -112,4 +126,5 @@ export default {
     truncateText,
     delay,
     objectToArrayOfObjects,
+    toFormData,
 };

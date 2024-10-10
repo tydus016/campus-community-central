@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Users;
 use Illuminate\Http\Request;
 use Exception;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
+use App\Models\Users;
+use App\Models\PasswordResetTokens;
+use App\Models\Organizations;
 
 class UsersController extends Controller
 {
@@ -41,6 +43,7 @@ class UsersController extends Controller
             $this->start_transact();
 
             $post = $request->all();
+            $post['account_type'] = ACCOUNT_TYPE_USER;
 
             $result = (new Users())->create_user($post);
             if (isset($result['success']) && $result['success']) {
@@ -55,43 +58,6 @@ class UsersController extends Controller
             $this->rollback_transact();
 
             $res = [
-                'messtatussage' => $e->getMessage(),
-                'status' => false,
-            ];
-        } finally {
-            $this->end_transact();
-        }
-
-        return $this->_response($res);
-    }
-
-    public function users_lists(Request $request)
-    {
-        try {
-            $this->start_transact();
-
-            $post = $request->all();
-
-            $result = (new Users())->get_users_lists($post);
-            if (isset($result['success']) && $result['success']) {
-
-                $res = [
-                    'data' => $result['data'],
-                    'count' => $result['count'],
-                    'total_count' => $result['total_count'],
-                    'has_next' => $result['has_next'],
-                    'status' => true,
-                ];
-            } else {
-                $res = [
-                    'message' => $result['message'],
-                    'status' => false,
-                ];
-            }
-        } catch (Exception $e) {
-            Log::error(__METHOD__ . ' - ' . $e->getMessage());
-
-            $res = [
                 'message' => $e->getMessage(),
                 'status' => false,
             ];
@@ -102,31 +68,57 @@ class UsersController extends Controller
         return $this->_response($res);
     }
 
-    public function users_details(Request $request)
+    public function security_questions(Request $request)
     {
         try {
             $this->start_transact();
 
             $post = $request->all();
+            $childhood_nickname = $post['childhood_nickname'];
+            $bestfriend_name = $post['bestfriend_name'];
+            $first_pet_name = $post['first_pet_name'];
 
             $result = (new Users())->get_user_details($post);
+
             if (isset($result['success']) && $result['success']) {
-
                 $data = $result['data'];
-                unset($data['password']);
 
-                $res = [
-                    'data' => $data,
-                    'status' => true,
-                ];
+                if (
+                    $data->childhood_nickname == $childhood_nickname &&
+                    $data->bestfriend_name == $bestfriend_name &&
+                    $data->first_pet_name == $first_pet_name
+                ) {
+
+                    $resetToken = (new PasswordResetTokens())->create_token($data->id);
+
+                    if (isset($resetToken['success']) && $resetToken['success']) {
+                        $res = [
+                            'message' => 'Security questions are correct.',
+                            'redirect' => 'new-password/' . $resetToken['token'],
+                            'status' => true,
+                        ];
+
+                        $this->commit_transact();
+                    } else {
+                        $res = [
+                            'message' => $resetToken['message'],
+                            'status' => $resetToken['success'],
+                        ];
+                    }
+                } else {
+                    $res = [
+                        'message' => 'Security questions are incorrect.',
+                        'status' => false,
+                    ];
+                }
             } else {
                 $res = [
                     'message' => $result['message'],
-                    'status' => false,
+                    'status' => $result['success'],
                 ];
             }
         } catch (Exception $e) {
-            Log::error(__METHOD__ . ' - ' . $e->getMessage());
+            Log::error($e->getMessage());
 
             $res = [
                 'message' => $e->getMessage(),
@@ -139,15 +131,19 @@ class UsersController extends Controller
         return $this->_response($res);
     }
 
-    public function update_user_status(Request $request)
+    public function change_password(Request $request)
     {
         try {
             $this->start_transact();
 
             $post = $request->all();
 
-            $result = (new Users())->update_user_status($post);
+            $result = (new Users())->update_password($post);
+
             if (isset($result['success']) && $result['success']) {
+
+                PasswordResetTokens::where('user_id', $post['user_id'])->delete();
+
                 $this->commit_transact();
             }
 
@@ -156,8 +152,8 @@ class UsersController extends Controller
                 'status' => $result['success'],
             ];
         } catch (Exception $e) {
+            Log::error($e->getMessage());
             $this->rollback_transact();
-            Log::error(__METHOD__ . ' - ' . $e->getMessage());
 
             $res = [
                 'message' => $e->getMessage(),
@@ -170,57 +166,52 @@ class UsersController extends Controller
         return $this->_response($res);
     }
 
-    public function update_delete_flg(Request $request)
+    public function create_admin_account(Request $request)
     {
+        $res = [];
+
         try {
             $this->start_transact();
 
             $post = $request->all();
-            $post['key'] = 'delete_flg';
+            $post['account_type'] = ACCOUNT_TYPE_ADMIN;
 
-            $result = (new Users())->update_user_status($post);
-            if (isset($result['success']) && $result['success']) {
-                $this->commit_transact();
+            $fileUpload = $this->upload($request, 'organization_image');
+            if (isset($fileUpload['success']) && $fileUpload['success']) {
+
+                $post['organization_image'] = $fileUpload['file_path'];
+                $result = (new Organizations())->create_organization($post);
+
+                if (isset($result['success']) && $result['success']) {
+                    $post['organization_id'] = $result['org_id'];
+
+                    $createUser = (new Users())->create_user($post);
+
+                    if ($createUser['success']) {
+                        $this->commit_transact();
+
+                        $res = [
+                            'message' => 'Organization Account Created Successfully',
+                            'status' => $result['success'],
+                        ];
+                    } else {
+                        $this->rollback_transact();
+
+                        $res = [
+                            'message' => $createUser['message'],
+                            'status' => $createUser['success'],
+                        ];
+                    }
+                } else {
+                    $res = [
+                        'message' => $result['message'],
+                        'status' => $result['success'],
+                    ];
+                }
             }
-
-            $res = [
-                'message' => $result['message'],
-                'status' => $result['success'],
-            ];
         } catch (Exception $e) {
+            Log::error($e->getMessage());
             $this->rollback_transact();
-            Log::error(__METHOD__ . ' - ' . $e->getMessage());
-
-            $res = [
-                'message' => $e->getMessage(),
-                'status' => false,
-            ];
-        } finally {
-            $this->end_transact();
-        }
-
-        return $this->_response($res);
-    }
-
-    public function update_user_details(Request $request)
-    {
-        try {
-            $this->start_transact();
-
-            $post = $request->all();
-
-            $result = (new Users())->update_user_details($post);
-            if (isset($result['success']) && $result['success']) {
-                $this->commit_transact();
-            }
-
-            $res = [
-                'message' => $result['message'],
-                'status' => $result['success'],
-            ];
-        } catch (Exception $e) {
-            $this->rollback_transact();
-            Log::error(__METHOD__ . ' - ' . $e->getMessage());
 
             $res = [
                 'message' => $e->getMessage(),

@@ -1,12 +1,13 @@
 import { post } from "../http/axios";
-const prefix = "users/";
+const prefix = "/users/";
+import { toFormData } from "../configs/global_helpers";
 
-export const usersLists = async (obj = {}) => {
+export const registerUser = async (obj = {}) => {
     const objData = {
         ...obj,
     };
 
-    const url = prefix + "users_lists";
+    const url = prefix + "create-user";
     const data = objData;
 
     return post(url, data)
@@ -14,17 +15,17 @@ export const usersLists = async (obj = {}) => {
             return response;
         })
         .catch((error) => {
-            console.error("HTTPS Request Error [users_lists]", error);
+            console.error("HTTPS Request Error [create-user]", error);
             return error;
         });
 };
 
-export const usersDetails = async (obj = {}) => {
+export const securityQuestions = async (obj = {}) => {
     const objData = {
         ...obj,
     };
 
-    const url = prefix + "users_details";
+    const url = prefix + "security-questions";
     const data = objData;
 
     return post(url, data)
@@ -32,17 +33,17 @@ export const usersDetails = async (obj = {}) => {
             return response;
         })
         .catch((error) => {
-            console.error("HTTPS Request Error [users_details]", error);
+            console.error("HTTPS Request Error [security-questions]", error);
             return error;
         });
 };
 
-export const updateUserDetails = async (obj = {}) => {
+export const changePassword = async (obj = {}) => {
     const objData = {
         ...obj,
     };
 
-    const url = prefix + "update_user_details";
+    const url = prefix + "change-password";
     const data = objData;
 
     return post(url, data)
@@ -50,43 +51,25 @@ export const updateUserDetails = async (obj = {}) => {
             return response;
         })
         .catch((error) => {
-            console.error("HTTPS Request Error [update_user_details]", error);
+            console.error("HTTPS Request Error [change-password]", error);
             return error;
         });
 };
 
-export const deleteUserAccount = async (obj = {}) => {
+export const createAdminAccount = async (obj = {}) => {
     const objData = {
         ...obj,
     };
 
-    const url = prefix + "update_delete_flg";
-    const data = objData;
+    const url = prefix + "create-admin-account";
+    const data = toFormData(objData);
 
     return post(url, data)
         .then((response) => {
             return response;
         })
         .catch((error) => {
-            console.error("HTTPS Request Error [update_delete_flg]", error);
-            return error;
-        });
-};
-
-export const addNewUser = async (obj = {}) => {
-    const objData = {
-        ...obj,
-    };
-
-    const url = prefix + "create_user";
-    const data = objData;
-
-    return post(url, data)
-        .then((response) => {
-            return response;
-        })
-        .catch((error) => {
-            console.error("HTTPS Request Error [create_user]", error);
+            console.error("HTTPS Request Error [create-admin-account]", error);
             return error;
         });
 };

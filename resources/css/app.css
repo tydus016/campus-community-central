@@ -454,8 +454,8 @@ body {
     font-size: 16px;
 }
 input#\:r0\: {
-    margin-left: 1.5rem;
-    color: white;
+    /* margin-left: 1.5rem; */
+    /* color: white; */
 }
 .search-icon {
     color: white;
@@ -809,6 +809,7 @@ img.sender-profile-image {
     height: 574px;
     background: var(--white);
     margin: 0 auto;
+    overflow: auto;
 }
 .userprofile-form-content {
     padding: 1.5rem;

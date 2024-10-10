@@ -41,6 +41,8 @@ function Icon({ type, className, style, onClick = () => {} }) {
                         import("@mui/icons-material/SendOutlined"),
                     ImageOutlined: () =>
                         import("@mui/icons-material/ImageOutlined"),
+                    CloudUploadOutlined: () =>
+                        import("@mui/icons-material/CloudUploadOutlined"),
                 };
 
                 if (iconMap[type]) {

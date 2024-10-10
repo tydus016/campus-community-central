@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 
 class Users extends Model
@@ -13,13 +14,18 @@ class Users extends Model
     protected $table = 'users';
 
     protected $fillable = [
-        'name',
-        'username',
-        'email',
+        'department_id',
+        'organization_id',
+        'remember_token',
+        'first_name',
+        'last_name',
+        'school_id',
+        'childhood_nickname',
+        'bestfriend_name',
+        'first_pet_name',
         'password',
         'login_token',
         'account_type',
-        'account_status',
         'delete_flg',
         'created_at',
         'updated_at',
@@ -28,22 +34,31 @@ class Users extends Model
 
     public function create_user(array $post)
     {
-        $name = $post['name'] ?? null;
-        $username = $post['username'] ?? null;
-        $email = $post['email'] ?? null;
+        $department_id = $post['department_id'] ?? null;
+        $organization_id = $post['organization_id'] ?? null;
+        $first_name = $post['first_name'] ?? null;
+        $last_name = $post['last_name'] ?? null;
+        $school_id = $post['school_id'] ?? null;
+        $childhood_nickname = $post['childhood_nickname'] ?? null;
+        $bestfriend_name = $post['bestfriend_name'] ?? null;
+        $first_pet_name = $post['first_pet_name'] ?? null;
         $password = $post['password'] ?? null;
         $confirm_password = $post['confirm_password'] ?? null;
 
-        $login_token = $post['login_token'] ?? generate_code(8);
-        $account_type = $post['account_type'] ?? ADMIN_TYPE_SUPER;
-        $account_status = $post['account_status'] ?? ACCOUNT_STATUS_ACTIVE;
+        $remember_token = $post['login_token'] ?? generate_code(8);
+        $account_type = $post['account_type'] ?? null;
         $current_date = now();
+
+        Log::info('create_user: ' . json_encode($post));
 
         try {
             $validator = Validator::make($post, [
-                'name' => 'required',
-                'username' => 'required|unique:users',
-                'email' => 'required|email|unique:users',
+                'first_name' => 'required',
+                'last_name' => 'required',
+                'school_id' => 'required|unique:users',
+                'childhood_nickname' => 'required',
+                'bestfriend_name' => 'required',
+                'first_pet_name' => 'required',
                 'password' => 'required|min:8|max:16',
                 'confirm_password' => 'required|same:password',
             ]);
@@ -56,13 +71,17 @@ class Users extends Model
             }
 
             $insert_data  = [
-                'name' => $name,
-                'username' => $username,
-                'email' => $email,
+                'department_id' => $department_id,
+                'organization_id' => $organization_id,
+                'first_name' => $first_name,
+                'last_name' => $last_name,
+                'school_id' => $school_id,
+                'childhood_nickname' => $childhood_nickname,
+                'bestfriend_name' => $bestfriend_name,
+                'first_pet_name' => $first_pet_name,
                 'password' => Hash::make($password),
-                'login_token' => $login_token,
                 'account_type' => $account_type,
-                'account_status' => $account_status,
+                'remember_token' => $remember_token,
                 'created_at' => $current_date,
             ];
 
@@ -86,53 +105,17 @@ class Users extends Model
     public function get_user_details(array $post)
     {
         $user_id = $post['user_id'] ?? null;
-        $name = $post['name'] ?? null;
-        $username = $post['username'] ?? null;
-        $email = $post['email'] ?? null;
-        $username_email = $post['username_email'] ?? null;
-        $login_token = $post['login_token'] ?? null;
+        $school_id = $post['school_id'] ?? null;
 
         try {
             $query = self::query();
-            $query->select(
-                'id',
-                'name',
-                'username',
-                'password',
-                'email',
-                'account_type',
-                'account_status',
-                'account_type as account_type_int',
-                'account_status as account_status_int',
-                'created_at',
-                'updated_at'
-            );
 
             if ($user_id) {
-                $query->where("id", $user_id);
+                $query->where('id', $user_id);
             }
 
-            if ($name) {
-                $query->where("name", $name);
-            }
-
-            if ($username) {
-                $query->where("username", $username);
-            }
-
-            if ($email) {
-                $query->where("email", $email);
-            }
-
-            if ($login_token) {
-                $query->where("login_token", $login_token);
-            }
-
-            if ($username_email) {
-                $query->where(function ($query) use ($username_email) {
-                    $query->where('username', $username_email)
-                        ->orWhere('email', $username_email);
-                });
+            if ($school_id) {
+                $query->where('school_id', $school_id);
             }
 
             $result = $query->first();
@@ -148,6 +131,54 @@ class Users extends Model
                     'message' => 'User not found'
                 ];
             }
+        } catch (QueryException $e) {
+            $res = [
+                'success' => false,
+                'message' => $e->getMessage()
+            ];
+        }
+
+        return $res;
+    }
+
+    public function update_password(array $post)
+    {
+        $user_id = $post['user_id'] ?? null;
+        $password = $post['password'] ?? null;
+        $confirm_password = $post['confirm_password'] ?? null;
+
+        Log::info('update_password: ' . json_encode($post));
+
+        try {
+            $validator = Validator::make($post, [
+                'user_id' => 'required',
+                'password' => 'required',
+                'confirm_password' => 'required|same:password',
+            ]);
+
+            if ($validator->fails()) {
+                return [
+                    'message' => $validator->errors()->first(),
+                    'success' => false,
+                ];
+            }
+
+            $user = self::find($user_id);
+
+            if (!$user) {
+                return [
+                    'success' => false,
+                    'message' => 'User not found'
+                ];
+            }
+
+            $user->password = Hash::make($password);
+            $user->save();
+
+            $res = [
+                'success' => true,
+                'message' => 'Password updated successfully'
+            ];
         } catch (QueryException $e) {
             $res = [
                 'success' => false,
@@ -378,14 +409,14 @@ class Users extends Model
         return $statuses[$value] ?? 'unknown';
     }
 
-    public function getAccountTypeAttribute($value)
-    {
-        $types = [
-            1 => 'Super Admin',
-            2 => 'Admin',
-            3 => 'User/Staff',
-        ];
+    // public function getAccountTypeAttribute($value)
+    // {
+    //     $types = [
+    //         1 => 'Super Admin',
+    //         2 => 'Admin',
+    //         3 => 'User/Staff',
+    //     ];
 
-        return $types[$value] ?? 'unknown';
-    }
+    //     return $types[$value] ?? 'unknown';
+    // }
 }

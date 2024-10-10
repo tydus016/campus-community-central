@@ -30,4 +30,9 @@ class AdminController extends Controller
     {
         return Inertia::render('Admin/Profile');
     }
+
+    public function add_org_view()
+    {
+        return Inertia::render('Admin/AddOrganization');
+    }
 }

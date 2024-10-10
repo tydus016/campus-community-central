@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { TextField, Button, Checkbox, InputAdornment } from "@mui/material";
-import { styled } from "@mui/material/styles";
 import { Link } from "@inertiajs/inertia-react";
+import { Inertia } from "@inertiajs/inertia";
 
 import Icon from "../Icon";
+import MessageDialog from "../MessageDialog";
 
-import departments from "../../../static/department_choices.json";
+import { authenticate } from "../../api/login_api";
 
 function SigninForm(props) {
     const [eyeState, setEyeState] = useState({
@@ -20,91 +21,154 @@ function SigninForm(props) {
         }));
     };
 
+    const [schoolID, setSchoolID] = useState("");
+    const [password, setPassword] = useState("");
+    const [dialogMessage, setDialogMessage] = useState("");
+    const [dialogState, setDialogState] = useState(false);
+
+    const onInputChange = (e) => {
+        const target = e.target;
+        const el = target.id;
+        const value = target.value;
+
+        switch (el) {
+            case "schoolID":
+                setSchoolID(value);
+                break;
+            case "password":
+                setPassword(value);
+                break;
+
+            default:
+                break;
+        }
+    };
+
     const onFormSubmit = () => {
-        console.log("form submitted", selectedCourses);
+        const objData = {
+            schoolID,
+            password,
+        };
+
+        authenticate(objData)
+            .then((res) => {
+                const { message, status } = res;
+
+                if (!status) {
+                    setDialogMessage(message);
+                    setDialogState(true);
+                    return;
+                }
+
+                Inertia.visit(res.redirect);
+            })
+            .catch((err) => {})
+            .finally(() => {});
+    };
+
+    const closeDialog = () => {
+        setDialogState(false);
     };
 
     return (
-        <form action="">
-            <div className="auth-form-group">
-                <label className="form-group-label">ID No.</label>
-                <div className="form-group-inputs">
-                    <TextField
-                        variant="outlined"
-                        type={eyeState.password ? "text" : "password"}
-                        className="auth-input"
-                        InputProps={{
-                            endAdornment: (
-                                <InputAdornment position="end">
-                                    <div
-                                        className="eye-password"
-                                        onClick={() =>
-                                            onShowPassword("password")
-                                        }
-                                    >
-                                        {eyeState.password ? (
-                                            <Icon type="Visibility" />
-                                        ) : (
-                                            <Icon type="VisibilityOff" />
-                                        )}
-                                    </div>
-                                </InputAdornment>
-                            ),
-                        }}
-                    />
+        <>
+            {dialogState && (
+                <MessageDialog onClose={closeDialog} onConfirm={closeDialog}>
+                    {dialogMessage}
+                </MessageDialog>
+            )}
+
+            <form action="">
+                <div className="auth-form-group">
+                    <label className="form-group-label">ID No.</label>
+                    <div className="form-group-inputs">
+                        <TextField
+                            id="schoolID"
+                            variant="outlined"
+                            type={eyeState.password ? "text" : "password"}
+                            className="auth-input"
+                            InputProps={{
+                                endAdornment: (
+                                    <InputAdornment position="end">
+                                        <div
+                                            className="eye-password"
+                                            onClick={() =>
+                                                onShowPassword("password")
+                                            }
+                                        >
+                                            {eyeState.password ? (
+                                                <Icon type="Visibility" />
+                                            ) : (
+                                                <Icon type="VisibilityOff" />
+                                            )}
+                                        </div>
+                                    </InputAdornment>
+                                ),
+                            }}
+                            onChange={onInputChange}
+                            value={schoolID}
+                        />
+                    </div>
                 </div>
-            </div>
 
-            <div className="auth-form-group">
-                <label className="form-group-label">Password</label>
-                <div className="form-group-inputs">
-                    <TextField
-                        variant="outlined"
-                        type={eyeState.confirm_password ? "text" : "password"}
-                        className="auth-input"
-                        InputProps={{
-                            endAdornment: (
-                                <InputAdornment position="end">
-                                    <div
-                                        className="eye-password"
-                                        onClick={() =>
-                                            onShowPassword("confirm_password")
-                                        }
-                                    >
-                                        {eyeState.confirm_password ? (
-                                            <Icon type="Visibility" />
-                                        ) : (
-                                            <Icon type="VisibilityOff" />
-                                        )}
-                                    </div>
-                                </InputAdornment>
-                            ),
-                        }}
-                    />
+                <div className="auth-form-group">
+                    <label className="form-group-label">Password</label>
+                    <div className="form-group-inputs">
+                        <TextField
+                            id="password"
+                            variant="outlined"
+                            type={
+                                eyeState.confirm_password ? "text" : "password"
+                            }
+                            className="auth-input"
+                            InputProps={{
+                                endAdornment: (
+                                    <InputAdornment position="end">
+                                        <div
+                                            className="eye-password"
+                                            onClick={() =>
+                                                onShowPassword(
+                                                    "confirm_password"
+                                                )
+                                            }
+                                        >
+                                            {eyeState.confirm_password ? (
+                                                <Icon type="Visibility" />
+                                            ) : (
+                                                <Icon type="VisibilityOff" />
+                                            )}
+                                        </div>
+                                    </InputAdornment>
+                                ),
+                            }}
+                            onChange={onInputChange}
+                            value={password}
+                        />
+                    </div>
                 </div>
-            </div>
 
-            <div className="auth-form-actions">
-                <Button
-                    className="auth-form-btn light-blue"
-                    onClick={onFormSubmit}
-                >
-                    Sign In
-                </Button>
-            </div>
-
-            <div className="forgot-pw">
-                <span className="forgot-pw-txt">
-                    Forgot{" "}
-                    <Link
-                        className="forgot-pw-txt-style"
-                        href="/forgot-password"
+                <div className="auth-form-actions">
+                    <Button
+                        className="auth-form-btn light-blue"
+                        onClick={onFormSubmit}
                     >
-                        password?
-                    </Link>
-                </span>
-            </div>
-        </form>
+                        Sign In
+                    </Button>
+                </div>
+
+                <div className="forgot-pw">
+                    <span className="forgot-pw-txt">
+                        Forgot{" "}
+                        <Link
+                            className="forgot-pw-txt-style"
+                            href="/forgot-password"
+                        >
+                            password?
+                        </Link>
+                    </span>
+                </div>
+            </form>
+        </>
     );
 }
 
